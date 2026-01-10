@@ -1,0 +1,64 @@
+plugins {
+	id 'java'
+	//부트 버전 3.5 부터는 hibernate와
+	//id 'org.springframework.boot' version '3.5.0'
+	//id 'io.spring.dependency-management' version '1.1.7'
+	//id 'org.hibernate.orm' version '6.6.15.Final'
+	//id 'org.graalvm.buildtools.native' version '0.10.6'
+	//부트버젼 3.1이하에서는 아래사용
+	id 'org.springframework.boot' version '3.1.11'
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	//implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+	testImplementation 'org.springframework.security:spring-security-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+//부트버젼 3.1 이하에서는 사용불가
+/*
+hibernate {
+	enhancement {
+		enableAssociationManagement = true
+	}
+}
+*/
+tasks.named('test') {
+	useJUnitPlatform()
+}
