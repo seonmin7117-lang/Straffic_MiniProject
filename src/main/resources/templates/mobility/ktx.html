@@ -5,105 +5,116 @@
 <body>
 <div layout:fragment="content">
     <style>
-        /* 전체 레이아웃 패딩 조절 (기존 유지) */
-        .layout-content { padding: 110px 20px 40px; }
-        @media (max-width: 768px) { .layout-content { padding-top: 100px; } }
-
-        /* notice-form-wrapper의 스타일을 참고하여 너비와 배경 설정 */
-        .ktx-page {
-            max-width: 800px; /* notice form과 동일하게 맞춤 */
-            margin: 0 auto;
+        /* 1. 전체 레이아웃 및 간격 조절 */
+        .layout-content {
+            padding: 80px 0 40px; /* 상단 바와의 간격을 줄이기 위해 패딩 조정 */
+            min-height: 200vh;   /* 세로 길이를 화면 꽉 차게 확장 */
+            display: flex;
+            flex-direction: column;
         }
 
+        @media (max-width: 768px) {
+            .layout-content { padding-top: 70px; }
+        }
+
+        /* 2. PC 버전: 상단 바(Top)의 넓은 너비에 맞게 최적화 */
+        .ktx-page {
+            width: 100%;          /* 양옆 최소 여백 유지 */
+            max-width: 1500px;   /* PC 화면에서 넓게 보이기 위해 확장 (기존 800px에서 수정) */
+            margin:  auto;
+            transition: max-width 0.3s ease; /* 너비 변경 시 부드러운 전환 */
+        }
+
+        /* 3. 컨테이너 스타일 (notice-form 스타일 계승) */
         .ktx-container {
             width: 100%;
             background: #fff;
-            padding: 24px; /* notice form과 동일한 패딩 */
-            border-radius: 12px; /* 둥근 모서리 통일 */
-            border: 1px solid #ddd; /* notice form의 깔끔한 테두리 스타일 참고 */
+            padding: 20px; auto;      /* 넓어진 너비에 맞춰 내부 여백 확대 */
+            border-radius: 12px;
+            border: 1px solid #ddd;
             box-sizing: border-box;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05); /* 약간의 입체감 추가 */
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08); /* 가독성을 위한 그림자 강조 */
+            margin: 1px 1px 1px;    /* 상단 메뉴와의 미세 간격 조정 */
         }
 
         .ktx-container h1 {
-            font-size: 1.4rem;
-            margin-bottom: 20px;
+            font-size: 1.6rem;
+            margin-bottom: 25px;
             margin-top: 0;
+            font-weight: 700;
         }
 
-        /* 검색 행: 4열 구조 유지하되 간격 조정 */
+        /* 4. 검색 행: PC에서는 4열 구조 유지 */
         .search-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 16px; /* 간격을 조금 더 넓게 */
+            gap: 140px;           /* 요소 간 간격 넓힘 */
         }
 
-        .form-group { display: flex; flex-direction: column; gap: 6px; }
-        .form-label { font-weight: 600; margin-bottom: 4px; display: block; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-label { font-size: 14px; font-weight: 600; color: #444; }
 
-        /* 입력창 스타일을 notice form과 동일하게 변경 */
+        /* 입력창 및 버튼 (notice-form 무채색 톤) */
         .station-select, .form-input, .form-select {
             width: 100%;
-            padding: 8px 10px;
+            padding: 10px 12px;
             border-radius: 6px;
-            border: 1px solid #ddd;
-            box-sizing: border-box;
+            border: 1px solid #ccc;
+            font-size: 15px;
         }
 
-        /* 버튼 스타일을 notice form의 btn-primary 스타일로 통일 */
         .btn {
-            padding: 10px 16px;
+            padding: 12px 20px;
             border-radius: 6px;
             border: none;
             cursor: pointer;
             font-weight: 600;
+            transition: 0.2s;
         }
-        .btn-primary {
-            background: #333; /* notice form의 무채색 톤 적용 */
-            color: #fff;
-        }
+        .btn-primary { background: #333; color: #fff; }
         .btn-primary:hover { background: #000; }
 
-        /* 열차 카드 스타일 */
+        /* 열차 리스트 카드 */
         .train-card {
             border: 1px solid #eee;
-            border-radius: 10px;
-            padding: 16px;
-            margin-top: 14px;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
             display: grid;
             grid-template-columns: 1fr auto;
-            gap: 12px;
             align-items: center;
+            gap: 20px;
         }
 
-        .train-route { display: flex; align-items: center; gap: 15px; font-size: 14px; color: #555; }
-        .price { font-size: 1.1rem; font-weight: 700; color: #333; }
-
-        /* 좌석 및 모달 스타일 (기존 기능 유지하되 디자인 톤 맞춤) */
-        .seat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 15px 0; }
-        .seat-item { border: 1px solid #ddd; border-radius: 6px; padding: 10px; text-align: center; cursor: pointer; }
-        .seat-item:hover { background: #f9f9f9; }
-        .seat-item.selected { background: #333; color: #fff; border-color: #333; }
-
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; }
-        .modal.active { display: flex; }
-        .modal-content {
-            background: #fff;
-            border-radius: 12px;
-            padding: 24px;
-            width: 90%;
-            max-width: 500px;
-            border: 1px solid #ddd;
+        /* 📱 모바일 및 태블릿 최적화 (반응형) */
+        @media (max-width: 1024px) {
+            .ktx-page { max-width: 800px; } /* 중급 화면에서는 notice-form 너비로 */
         }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .modal-title { font-weight: 700; font-size: 1.1rem; }
-        .btn-close { border: none; background: transparent; font-size: 24px; cursor: pointer; color: #999; }
 
-        /* 📱 모바일 버전 최적화 */
         @media (max-width: 768px) {
-            .search-row { grid-template-columns: repeat(2, 1fr); }
-            .train-card { grid-template-columns: 1fr; text-align: left; }
-            .price { text-align: left; margin-bottom: 8px; }
+            .ktx-page { width: 92%; }
+            .ktx-container { padding:  20px; }
+            .search-row {
+                grid-template-columns: repeat(2, 1fr); /* 4열 -> 2열로 변경 */
+                gap: 12px;
+            }
+            .train-card {
+                grid-template-columns: 1fr; /* 카드 세로 배치 */
+                text-align: left;
+            }
+            .price { margin-bottom: 10px; }
+            .btn { width: 100%; } /* 모바일에서는 버튼 꽉 차게 */
+        }
+
+        /* 좌석 그리드 반응형 */
+        .seat-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        @media (max-width: 480px) {
+            .seat-grid { grid-template-columns: repeat(4, 1fr); }
         }
     </style>
 
