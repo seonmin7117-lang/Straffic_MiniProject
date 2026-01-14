@@ -599,7 +599,7 @@
                 <!-- Recent Notices -->
                 <a th:each="n : ${recentNotices}" th:href="@{/notice/view/{id}(id=${n.id})}" class="news-item">
                     <span class="news-badge" th:text="${n.tag}">[공지]</span>
-                    <span class="news-title" th:text="${n.title}">공지사항 제목입니다.</span>
+                    <span class="news-title" th:text="${#strings.length(n.title) > 5 ? #strings.substring(n.title, 0, 5) + '...' : n.title}">공지사항 제목입니다.</span>
                     <span class="news-date" th:text="${#temporals.format(n.createdAt, 'yyyy-MM-dd')}">2026-01-01</span>
                 </a>
                 

@@ -6,7 +6,8 @@
 <body>
 <div layout:fragment="content">
     <style>
-        .noticeList table { width: 100%; border-collapse: collapse; background: white; }
+        .notice-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .noticeList table { width: 100%; border-collapse: collapse; background: white; table-layout: fixed; }
         .noticeList th, .noticeList td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
         .noticeList thead th { background: #f7f7f7; font-weight: 700; }
         .noticeList .cate { width: 120px; color: #6a1b9a; font-weight: 700; }
@@ -65,74 +66,76 @@
         .btn-write:hover { background: #000; }
     </style>
 
-    <div class="notice-header">
-        <h1 style="margin: 0;">공지사항</h1>
-    </div>
+    <div class="notice-container">
+        <div class="notice-header">
+            <h1 style="margin: 0;">공지사항</h1>
+        </div>
 
-    <div class="notice-tools">
-        <form th:action="@{/notice/list}" method="get" style="display:flex; gap:10px;">
-            <select name="tag">
-                <option value="" th:selected="${tag == null or tag == ''}">전체</option>
-                <option value="공지" th:selected="${tag == '공지'}">공지</option>
-                <option value="이벤트" th:selected="${tag == '이벤트'}">이벤트</option>
-            </select>
-            <input type="text" name="q" placeholder="검색어를 입력하세요." th:value="${q}">
-            <button type="submit" class="btn-write" style="padding:8px 14px;">검색</button>
-        </form>
-        <a sec:authorize="hasRole('ADMIN')" href="/notice/admin/create" class="btn-write">공지 작성</a>
-    </div>
+        <div class="notice-tools">
+            <form th:action="@{/notice/list}" method="get" style="display:flex; gap:10px;">
+                <select name="tag">
+                    <option value="" th:selected="${tag == null or tag == ''}">전체</option>
+                    <option value="공지" th:selected="${tag == '공지'}">공지</option>
+                    <option value="이벤트" th:selected="${tag == '이벤트'}">이벤트</option>
+                </select>
+                <input type="text" name="q" placeholder="검색어를 입력하세요." th:value="${q}">
+                <button type="submit" class="btn-write" style="padding:8px 14px;">검색</button>
+            </form>
+            <a sec:authorize="hasRole('ADMIN')" href="/notice/admin/create" class="btn-write">공지 작성</a>
+        </div>
 
-    <div class="noticeList">
-        <table>
-            <colgroup>
-                <col class="cate">
-                <col class="tit">
-                <col class="date">
-                <col class="count">
-            </colgroup>
-            <thead>
-            <tr>
-                <th class="cate">카테고리</th>
-                <th class="tit">제목</th>
-                <th class="date">등록일</th>
-                <th class="count">조회수</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="n : ${notices.getContent()}">
-                <td class="cate" th:text="${n.tag}">[공지]</td>
-                <td class="tit">
-                    <a th:href="@{/notice/view/{id}(id=${n.id})}">
-                        <span th:if="${n.pinned}" style="color:#e53935; font-weight:700;">[상단]</span>
-                        <span th:text="${n.title}">제목</span>
-                    </a>
-                </td>
-                <td class="date" th:text="${#temporals.format(n.createdAt, 'yyyy-MM-dd')}">2026-01-01</td>
-                <td class="count" th:text="${n.views}">0</td>
-            </tr>
-            <tr th:if="${notices.totalElements == 0}">
-                <td colspan="4" style="text-align:center; color:#777;">등록된 공지사항이 없습니다.</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+        <div class="noticeList">
+            <table>
+                <colgroup>
+                    <col class="cate">
+                    <col class="tit">
+                    <col class="date">
+                    <col class="count">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th class="cate">카테고리</th>
+                    <th class="tit">제목</th>
+                    <th class="date">등록일</th>
+                    <th class="count">조회수</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="n : ${notices.getContent()}">
+                    <td class="cate" th:text="${n.tag}">[공지]</td>
+                    <td class="tit">
+                        <a th:href="@{/notice/view/{id}(id=${n.id})}">
+                            <span th:if="${n.pinned}" style="color:#e53935; font-weight:700;">[상단]</span>
+                            <span th:text="${#strings.length(n.title) > 5 ? #strings.substring(n.title, 0, 5) + '...' : n.title}">제목</span>
+                        </a>
+                    </td>
+                    <td class="date" th:text="${#temporals.format(n.createdAt, 'yyyy-MM-dd')}">2026-01-01</td>
+                    <td class="count" th:text="${n.views}">0</td>
+                </tr>
+                <tr th:if="${notices.totalElements == 0}">
+                    <td colspan="4" style="text-align:center; color:#777;">등록된 공지사항이 없습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <div class="pagination" th:if="${notices.totalPages > 0}">
-        <a th:href="@{/notice/list(page=0, q=${q}, tag=${tag})}" title="처음"><span class="material-symbols-outlined" style="font-size:16px;">first_page</span></a>
-        <a th:if="${notices.number > 0}" th:href="@{/notice/list(page=${notices.number - 1}, q=${q}, tag=${tag})}" title="이전"><span class="material-symbols-outlined" style="font-size:16px;">chevron_left</span></a>
-        
-        <span class="paginationNum">
-            <!-- Show max 5 page numbers -->
-            <th:block th:with="start=${(notices.number/5)*5}, end=${((notices.number/5)*5)+4 < notices.totalPages-1 ? ((notices.number/5)*5)+4 : notices.totalPages-1}">
-                <th:block th:each="i : ${#numbers.sequence(start, end)}">
-                    <strong th:if="${i == notices.number}" th:text="${i + 1}">1</strong>
-                    <a th:unless="${i == notices.number}" th:href="@{/notice/list(page=${i}, q=${q}, tag=${tag})}" th:text="${i + 1}">2</a>
+        <div class="pagination" th:if="${notices.totalPages > 0}">
+            <a th:href="@{/notice/list(page=0, q=${q}, tag=${tag})}" title="처음"><span class="material-symbols-outlined" style="font-size:16px;">first_page</span></a>
+            <a th:if="${notices.number > 0}" th:href="@{/notice/list(page=${notices.number - 1}, q=${q}, tag=${tag})}" title="이전"><span class="material-symbols-outlined" style="font-size:16px;">chevron_left</span></a>
+            
+            <span class="paginationNum">
+                <!-- Show max 5 page numbers -->
+                <th:block th:with="start=${(notices.number/5)*5}, end=${((notices.number/5)*5)+4 < notices.totalPages-1 ? ((notices.number/5)*5)+4 : notices.totalPages-1}">
+                    <th:block th:each="i : ${#numbers.sequence(start, end)}">
+                        <strong th:if="${i == notices.number}" th:text="${i + 1}">1</strong>
+                        <a th:unless="${i == notices.number}" th:href="@{/notice/list(page=${i}, q=${q}, tag=${tag})}" th:text="${i + 1}">2</a>
+                    </th:block>
                 </th:block>
-            </th:block>
-        </span>
+            </span>
 
-        <a th:if="${notices.number + 1 < notices.totalPages}" th:href="@{/notice/list(page=${notices.number + 1}, q=${q}, tag=${tag})}" title="다음"><span class="material-symbols-outlined" style="font-size:16px;">chevron_right</span></a>
-        <a th:href="@{/notice/list(page=${notices.totalPages - 1}, q=${q}, tag=${tag})}" title="끝"><span class="material-symbols-outlined" style="font-size:16px;">last_page</span></a>
+            <a th:if="${notices.number + 1 < notices.totalPages}" th:href="@{/notice/list(page=${notices.number + 1}, q=${q}, tag=${tag})}" title="다음"><span class="material-symbols-outlined" style="font-size:16px;">chevron_right</span></a>
+            <a th:href="@{/notice/list(page=${notices.totalPages - 1}, q=${q}, tag=${tag})}" title="끝"><span class="material-symbols-outlined" style="font-size:16px;">last_page</span></a>
+        </div>
     </div>
 </div>
 </body>
