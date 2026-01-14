@@ -18,7 +18,6 @@
         .notice-tools { display: flex; gap: 10px; margin: 14px 0 18px; }
         .notice-tools input, .notice-tools select { padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; }
         
-        /* Modern Pagination CSS */
         .pagination { 
             margin-top: 30px; 
             display: flex; 
@@ -64,6 +63,72 @@
         .notice-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
         .btn-write { padding: 8px 14px; background: #333; color: #fff; border-radius: 6px; text-decoration: none; }
         .btn-write:hover { background: #000; }
+
+        @media (max-width: 768px) {
+            .notice-container { padding: 0 16px; }
+            .notice-header h1 { font-size: 1.5rem; }
+
+            .notice-tools { flex-direction: column; gap: 10px; }
+            .notice-tools form { display: flex; gap: 8px; width: 100%; }
+            .notice-tools select { width: 100px; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; }
+            .notice-tools input { flex: 1; width: auto; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; }
+            .btn-write { width: 100%; text-align: center; box-sizing: border-box; }
+
+            .noticeList table { display: block; border: 0; }
+            .noticeList thead { display: none; }
+            .noticeList tbody { display: block; }
+
+            .noticeList tr {
+                display: block;
+                padding: 16px;
+                border-bottom: 1px solid #eee;
+                background: #fff;
+                position: relative;
+            }
+
+            .noticeList td {
+                display: block;
+                padding: 0;
+                border: none;
+                text-align: left;
+                width: auto;
+                box-sizing: border-box;
+            }
+
+            .noticeList .cate {
+                font-size: 0.85rem;
+                font-weight: 700;
+                color: #6a1b9a;
+                margin-bottom: 4px;
+            }
+
+            .noticeList .tit {
+                font-size: 1.1rem;
+                font-weight: 600;
+                margin-bottom: 8px;
+                display: block;
+                line-height: 1.4;
+            }
+
+            .noticeList .date,
+            .noticeList .count {
+                display: inline-block;
+                font-size: 0.85rem;
+                color: #888;
+                width: auto;
+                margin-right: 10px;
+            }
+
+            .noticeList .date::after {
+                content: "|";
+                margin-left: 10px;
+                color: #ddd;
+            }
+
+            .noticeList .count { text-align: left; }
+
+            .pagination { margin-top: 20px; }
+        }
     </style>
 
     <div class="notice-container">

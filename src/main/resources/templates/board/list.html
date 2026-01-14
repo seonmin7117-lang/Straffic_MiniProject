@@ -42,6 +42,74 @@
 
         .pinnedTag { color: #e53935; font-weight: 700; margin-right: 4px; }
         .popularTag { color: #6a1b9a; font-weight: 700; margin-right: 4px; }
+
+        /* 모바일 최적화 (Max Width 768px) */
+        @media (max-width: 768px) {
+            .notice-container { padding: 0 16px; }
+            .notice-header h1 { font-size: 1.5rem; }
+            
+            /* 검색 도구 모바일 최적화 */
+            .notice-tools { flex-direction: column; gap: 10px; }
+            .notice-tools form { display: flex; gap: 8px; width: 100%; }
+            .notice-tools select { width: 80px; flex-shrink: 0; }
+            .notice-tools input { flex: 1; width: auto; }
+            .btn-search { width: 60px; flex-shrink: 0; }
+            .btn-write { width: 100%; text-align: center; box-sizing: border-box; }
+
+            /* 테이블 -> 카드 리스트 변환 */
+            .noticeList table { display: block; border: 0; }
+            .noticeList thead { display: none; }
+            .noticeList tbody { display: block; }
+            
+            .noticeList tr { 
+                display: block; 
+                padding: 16px; 
+                border-bottom: 1px solid #eee; 
+                background: #fff;
+                position: relative;
+            }
+            
+            .noticeList td { 
+                display: block; 
+                padding: 0; 
+                border: none; 
+                text-align: left; 
+                width: auto;
+                box-sizing: border-box;
+            }
+
+            /* 번호(ID)는 숨기고, 공지/인기 태그가 있는 경우에만 표시 */
+            .noticeList .num { display: none; }
+            .noticeList .num:has(.pinnedTag), 
+            .noticeList .num:has(.popularTag) { 
+                display: inline-block; 
+                margin-bottom: 4px; 
+            }
+
+            /* 제목 스타일 */
+            .noticeList .tit { 
+                font-size: 1.1rem; 
+                font-weight: 600; 
+                margin-bottom: 8px;
+                display: block;
+                line-height: 1.4;
+            }
+            
+            /* 작성자, 날짜, 조회수 한 줄로 배치 */
+            .noticeList .writer, 
+            .noticeList .date, 
+            .noticeList .count { 
+                display: inline-block; 
+                font-size: 0.85rem; 
+                color: #888; 
+                width: auto;
+                margin-right: 10px;
+            }
+            
+            /* 구분자 */
+            .noticeList .writer::after { content: "|"; margin-left: 10px; color: #ddd; }
+            .noticeList .date::after { content: "|"; margin-left: 10px; color: #ddd; }
+        }
     </style>
 
     <div class="notice-container">
