@@ -10,6 +10,9 @@ import com.example.straffic.board.repository.BoardRepository;
 import com.example.straffic.board.repository.CommentRepository;
 import com.example.straffic.notice.entity.NoticeEntity;
 import com.example.straffic.notice.repository.NoticeRepository;
+import com.example.straffic.member.entity.MemberEntity;
+import com.example.straffic.member.repository.MemberRepository;
+import com.example.straffic.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +22,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
@@ -32,9 +37,11 @@ public class DashboardController {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     private final NoticeRepository noticeRepository;
+    private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     @GetMapping("/admin/dashboard")
-    public String dashboard(@RequestParam(value = "ktxPage", defaultValue = "0") int ktxPage,
+    public String dashboard(@RequestParam(value = "ktxPage", defaultValue = "1") int ktxPage,
                             Model model) {
         DailyViewsDTO dailyViews = new DailyViewsDTO(1234, 567, 89, 345);
 
@@ -50,11 +57,14 @@ public class DashboardController {
                 Arrays.asList(80, 100, 85, 120, 140, 150, 170, 165, 150, 130, 110, 100)
         );
 
-        Page<KtxReservationEntity> ktxPageResult = loadKtxReservationsPage(ktxPage);
+        int ktxPageIndex = Math.max(ktxPage - 1, 0);
+        Page<KtxReservationEntity> ktxPageResult = loadKtxReservationsPage(ktxPageIndex);
         List<KtxReservationSummaryDTO> ktxReservations = ktxPageResult.getContent()
                 .stream()
                 .map(this::toSummaryDto)
                 .collect(Collectors.toList());
+        int ktxTotalPages = Math.max(ktxPageResult.getTotalPages(), 1);
+        int ktxCurrentPage = Math.min(ktxPageIndex + 1, ktxTotalPages);
 
         long totalBoards = boardRepository.count();
         java.time.LocalDate today = java.time.LocalDate.now();
@@ -69,8 +79,8 @@ public class DashboardController {
         model.addAttribute("weeklyStats", weeklyStats);
         model.addAttribute("yearlyStats", yearlyStats);
         model.addAttribute("ktxReservations", ktxReservations);
-        model.addAttribute("ktxPage", ktxPageResult.getNumber());
-        model.addAttribute("ktxTotalPages", ktxPageResult.getTotalPages());
+        model.addAttribute("ktxPage", ktxCurrentPage);
+        model.addAttribute("ktxTotalPages", ktxTotalPages);
         model.addAttribute("boardTodayCount", todayBoards);
         model.addAttribute("boardTotalCount", totalBoards);
         model.addAttribute("boardAnsweredCount", answeredBoards);
@@ -78,6 +88,42 @@ public class DashboardController {
         model.addAttribute("recent3Notices", recent3Notices);
 
         return "dashboard/dashboard";
+    }
+
+    @GetMapping("/dashboard/security")
+    public String security(@RequestParam(value = "page", defaultValue = "1") int page,
+                           Model model) {
+        int pageIndex = Math.max(page - 1, 0);
+        Page<MemberEntity> memberPage = memberService.entitypage(pageIndex);
+        int totalPage = memberPage.getTotalPages();
+        if (totalPage == 0) {
+            totalPage = 1;
+        }
+        int nowpage = memberPage.getNumber() + 1;
+
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfToday = today.atStartOfDay();
+
+        long totalBasic = memberRepository.countByProviderIsNull();
+        long totalGoogle = memberRepository.countByProvider("google");
+        long totalNaver = memberRepository.countByProvider("naver");
+        long totalKakao = memberRepository.countByProvider("kakao");
+
+        long todayBasic = memberRepository.countByProviderIsNullAndCreatedAtAfter(startOfToday);
+        long todayGoogle = memberRepository.countByProviderAndCreatedAtAfter("google", startOfToday);
+        long todayNaver = memberRepository.countByProviderAndCreatedAtAfter("naver", startOfToday);
+        long todayKakao = memberRepository.countByProviderAndCreatedAtAfter("kakao", startOfToday);
+
+        List<Long> totalCounts = List.of(totalBasic, totalGoogle, totalNaver, totalKakao);
+        List<Long> todayCounts = List.of(todayBasic, todayGoogle, todayNaver, todayKakao);
+
+        model.addAttribute("list", memberPage.getContent());
+        model.addAttribute("totalPage", totalPage);
+        model.addAttribute("nowpage", nowpage);
+        model.addAttribute("totalCounts", totalCounts);
+        model.addAttribute("todayCounts", todayCounts);
+
+        return "security/security";
     }
 
     private Page<KtxReservationEntity> loadKtxReservationsPage(int page) {

@@ -13,7 +13,7 @@
 }
 
 .dashboard-sidebar {
-    background: #ffffff;
+    background: #f7faff;
     border-radius: 12px;
     border: 1px solid #e0e0e0;
     box-shadow: 0 4px 12px rgba(0,0,0,0.04);
@@ -24,7 +24,7 @@
 .dashboard-sidebar-title {
     font-size: 0.9rem;
     font-weight: 700;
-    color: #333333;
+    color: #0b254a;
     margin-bottom: 10px;
 }
 
@@ -39,21 +39,21 @@
     padding: 8px 10px;
     border-radius: 8px;
     font-size: 0.9rem;
-    color: #111827;
+    color: #123766;
     font-weight: 500;
     text-decoration: none;
     border: 1px solid transparent;
 }
 
 .dashboard-sidebar-item:hover {
-    background: #f3f4f6;
-    border-color: #e5e7eb;
+    background: #e3efff;
+    border-color: #c3d8ff;
 }
 
 .dashboard-sidebar-item.active {
-    background: #111827;
+    background: linear-gradient(135deg, #0051c7, #007aff);
     color: #ffffff;
-    border-color: #111827;
+    border-color: #0051c7;
 }
 
 .dashboard-content {
@@ -82,19 +82,19 @@
 
 .summary-title {
     font-size: 0.9rem;
-    color: #777777;
+    color: #5b6f92;
 }
 
 .summary-value {
     font-size: 1.6rem;
     font-weight: 800;
-    color: #111111;
+    color: #0b254a;
 }
 
-.summary-card.parking .summary-value { color: #1565c0; }
-.summary-card.ktx .summary-value { color: #2e7d32; }
-.summary-card.bike .summary-value { color: #f9a825; }
-.summary-card.subway .summary-value { color: #8e24aa; }
+.summary-card.parking .summary-value { color: #0041a8; }
+.summary-card.ktx .summary-value { color: #0066d9; }
+.summary-card.bike .summary-value { color: #2089ff; }
+.summary-card.subway .summary-value { color: #82b1ff; }
 
 .dashboard-main {
     display: grid;
@@ -150,11 +150,22 @@
     padding: 4px 0 10px;
 }
 
+.weekly-panel,
+.ktx-panel,
+.yearly-panel,
+.below-panel {
+    min-height: 350px;
+}
+
+.ktx-panel {
+    min-height: 350px;
+}
+
 .weekly-panel .panel-body,
 .ktx-panel .panel-body,
 .yearly-panel .panel-body,
 .below-panel .panel-body {
-    height: 280px;
+    flex: 1;
 }
 
 .ktx-list {
@@ -181,6 +192,22 @@
 .ktx-list th:last-child,
 .ktx-list td:last-child {
     width: 40%;
+}
+
+.ktx-list th:nth-child(1),
+.ktx-list td:nth-child(1) {
+    width: 22%;
+}
+
+.ktx-list th:nth-child(2),
+.ktx-list td:nth-child(2) {
+    width: 14%;
+    text-align: center;
+}
+
+.ktx-list th:nth-child(3),
+.ktx-list td:nth-child(3) {
+    width: 24%;
 }
 
 .ktx-reservation-row {
@@ -257,6 +284,10 @@
     border: 1px solid #e5e7eb;
     color: #374151;
     text-decoration: none;
+    min-width: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .ktx-page-link:hover {

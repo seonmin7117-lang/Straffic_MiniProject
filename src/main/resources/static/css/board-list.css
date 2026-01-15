@@ -32,8 +32,8 @@
 .pagination strong { min-width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: #333; color: #fff; border: 1px solid #333; border-radius: 4px; font-weight: 600; }
 .pagination .paginationNum { display: flex; gap: 5px; }
 
-.pinnedTag { color: #e53935; font-weight: 700; margin-right: 4px; }
-.popularTag { color: #6a1b9a; font-weight: 700; margin-right: 4px; }
+.pinnedTag { color: #007aff; font-weight: 700; margin-right: 4px; }
+.popularTag { color: #4da3ff; font-weight: 700; margin-right: 4px; }
 
 /* 모바일 최적화 (Max Width 768px) */
 @media (max-width: 768px) {

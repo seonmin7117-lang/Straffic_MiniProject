@@ -23,7 +23,7 @@
                     <a href="/mobility/subway" class="dashboard-sidebar-item">지하철</a>
                     <a href="/board/list" class="dashboard-sidebar-item">게시판</a>
                     <a href="/notice/list" class="dashboard-sidebar-item">공지사항</a>
-                    <a href="/security" class="dashboard-sidebar-item">보안관리</a>
+                    <a href="/dashboard/security" class="dashboard-sidebar-item">보안관리</a>
                 </nav>
             </aside>
 
@@ -102,30 +102,30 @@
                                 <tr th:if="${ktxReservations == null or #lists.isEmpty(ktxReservations)}">
                                     <td colspan="4" style="text-align:center; color:#777;">예약 내역이 없습니다.</td>
                                 </tr>
+                                <tr th:if="${ktxReservations == null or #lists.isEmpty(ktxReservations)}"
+                                    th:each="i : ${#numbers.sequence(2,5)}">
+                                    <td colspan="4">&nbsp;</td>
+                                </tr>
+                                <tr th:if="${ktxReservations != null and !#lists.isEmpty(ktxReservations) and #lists.size(ktxReservations) < 5}"
+                                    th:each="i : ${#numbers.sequence(#lists.size(ktxReservations) + 1, 5)}">
+                                    <td colspan="4">&nbsp;</td>
+                                </tr>
                                 </tbody>
                             </table>
-                            <div class="ktx-pagination"
-                                 th:if="${ktxTotalPages != null and ktxTotalPages > 1}">
+                            <div class="ktx-pagination">
                                 <a class="ktx-page-link prev"
-                                   th:if="${ktxPage > 0}"
+                                   th:if="${ktxPage > 1}"
                                    th:href="@{|/admin/dashboard?ktxPage=${ktxPage - 1}|}">이전</a>
-                                <span class="ktx-page-link disabled" th:if="${ktxPage == 0}">이전</span>
+                                <span class="ktx-page-link disabled" th:if="${ktxPage <= 1}">이전</span>
 
-                                <span th:each="i : ${#numbers.sequence(0, ktxTotalPages - 1)}">
-                                    <a th:if="${i != ktxPage}"
-                                       th:href="@{|/admin/dashboard?ktxPage=${i}|}"
-                                       th:text="${i + 1}"
-                                       class="ktx-page-link"></a>
-                                    <span th:if="${i == ktxPage}"
-                                          th:text="${i + 1}"
-                                          class="ktx-page-link active"></span>
-                                </span>
+                                <span class="ktx-page-link active"
+                                      th:text="${ktxPage}">1</span>
 
                                 <a class="ktx-page-link next"
-                                   th:if="${ktxPage + 1 < ktxTotalPages}"
+                                   th:if="${ktxPage < ktxTotalPages}"
                                    th:href="@{|/admin/dashboard?ktxPage=${ktxPage + 1}|}">다음</a>
                                 <span class="ktx-page-link disabled"
-                                      th:if="${ktxPage + 1 >= ktxTotalPages}">다음</span>
+                                      th:if="${ktxPage >= ktxTotalPages}">다음</span>
                             </div>
                         </div>
                     </section>

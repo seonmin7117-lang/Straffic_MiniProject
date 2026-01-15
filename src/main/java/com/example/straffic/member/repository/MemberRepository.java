@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -25,4 +26,12 @@ select *
 from mem1213
 """, nativeQuery = true)
     Page<MemberInfo> interpage(Pageable pageable);
+
+    long countByProvider(String provider);
+
+    long countByProviderIsNull();
+
+    long countByProviderAndCreatedAtAfter(String provider, LocalDateTime createdAt);
+
+    long countByProviderIsNullAndCreatedAtAfter(LocalDateTime createdAt);
 }

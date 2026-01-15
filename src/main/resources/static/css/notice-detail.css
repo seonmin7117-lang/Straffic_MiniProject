@@ -33,6 +33,10 @@
     word-break: break-word; 
     line-height: 1.6;
 }
+.noticeCnts img {
+    max-width: 33%;
+    height: auto;
+}
 .notice-images { 
     margin-top: 20px; 
     display: flex; 
@@ -40,7 +44,7 @@
     gap: 10px; 
 }
 .notice-images img { 
-    max-width: 100%; 
+    max-width: 33%; 
     height: auto; 
     border-radius: 8px; 
 }

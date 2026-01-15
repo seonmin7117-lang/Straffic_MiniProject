@@ -47,7 +47,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Page<MemberEntity> entitypage(int page) {
-        return memberRepository.findAll(PageRequest.of(page, 3));
+        return memberRepository.findAll(PageRequest.of(page, 10));
     }
 
     @Override
@@ -88,5 +88,24 @@ public class MemberServiceImpl implements MemberService {
         }
         member.setTel(newTel);
         memberRepository.save(member);
+    }
+
+    @Override
+    public void updateRole(String memberId, String role) {
+        MemberEntity member = memberRepository.findOneById(memberId);
+        if (member == null) {
+            throw new IllegalStateException("회원 정보를 찾을 수 없습니다.");
+        }
+        member.setRole(role);
+        memberRepository.save(member);
+    }
+
+    @Override
+    public void deleteByAdmin(String memberId) {
+        MemberEntity member = memberRepository.findOneById(memberId);
+        if (member == null) {
+            throw new IllegalStateException("회원 정보를 찾을 수 없습니다.");
+        }
+        memberRepository.delete(member);
     }
 }

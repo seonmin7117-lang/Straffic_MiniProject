@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/member-memberOut.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</th:block>
+
+<div layout:fragment="content">
+    <div class="member-list-container">
+        <div class="page-header">
+            <h2 class="page-title">보안관리 - 회원 리스트</h2>
+        </div>
+
+        <div class="table-responsive">
+            <table class="modern-table">
+                <thead>
+                <tr>
+                    <th style="width: 20%;">아이디</th>
+                    <th style="width: 15%;">이름</th>
+                    <th style="width: 15%;">전화번호</th>
+                    <th style="width: 10%;">권한</th>
+                    <th style="width: 15%;">가입경로</th>
+                    <th style="width: 15%;">가입일</th>
+                    <th style="width: 10%;">관리</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="member : ${list}">
+                    <td th:text="${member.id}">user1</td>
+                    <td th:text="${member.name}">홍길동</td>
+                    <td th:text="${member.tel}">010-1234-5678</td>
+                    <td th:text="${member.role}">ROLE_USER</td>
+                    <td th:text="${member.provider == null ? '일반' : member.provider}">일반</td>
+                    <td th:text="${member.createdAt != null ? #temporals.format(member.createdAt, 'yyyy-MM-dd HH:mm') : '-'}">2024-01-01 10:00</td>
+                    <td>
+                        <form th:action="@{/security/member/role}" method="post" style="display:inline-block; margin-right:4px;">
+                            <input type="hidden" name="memberId" th:value="${member.id}"/>
+                            <input type="hidden" name="role"
+                                   th:value="${member.role != null and #strings.contains(member.role,'ADMIN') ? 'ROLE_USER' : 'ROLE_ADMIN'}"/>
+                            <button type="submit" class="btn-primary-modern" style="padding:4px 8px; font-size:12px;">
+                                <span th:text="${member.role != null and #strings.contains(member.role,'ADMIN') ? '관리자 해제' : '관리자 부여'}">관리자 부여</span>
+                            </button>
+                        </form>
+                        <form th:action="@{/security/member/delete}" method="post" style="display:inline-block;">
+                            <input type="hidden" name="memberId" th:value="${member.id}"/>
+                            <button type="submit" class="btn-success-modern" style="padding:4px 8px; font-size:12px; background:#e53935;">
+                                삭제
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(list)}">
+                    <td colspan="7" style="text-align: center; padding: 50px; color: #999;">
+                        등록된 회원이 없습니다.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination-container" th:if="${totalPage > 0}">
+            <ul class="modern-pagination">
+                <li th:each="pageNum : ${#numbers.sequence(1, totalPage)}"
+                    th:classappend="${nowpage == pageNum} ? 'active'">
+                    <a th:href="@{/security(page=${pageNum})}"
+                       th:text="${pageNum}">1</a>
+                </li>
+            </ul>
+        </div>
+
+        <div style="margin-top:40px;">
+            <h2 class="page-title" style="margin-bottom:20px;">회원 통계</h2>
+            <div style="display:flex; flex-wrap:wrap; gap:24px;">
+                <div style="flex:1; min-width:280px;">
+                    <h3 style="margin-bottom:10px;">전체 회원 가입 경로</h3>
+                    <canvas id="totalMemberChart"></canvas>
+                </div>
+                <div style="flex:1; min-width:280px;">
+                    <h3 style="margin-bottom:10px;">오늘 신규 가입자 경로</h3>
+                    <canvas id="todayMemberChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        const totalData = /*[[${totalCounts}]]*/ [0,0,0,0];
+        const todayData = /*[[${todayCounts}]]*/ [0,0,0,0];
+        const labels = ['일반', '구글', '네이버', '카카오'];
+        const colors = ['#424242', '#4285F4', '#03C75A', '#FEE500'];
+
+        const totalCtx = document.getElementById('totalMemberChart');
+        const todayCtx = document.getElementById('todayMemberChart');
+
+        if (totalCtx) {
+            new Chart(totalCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: totalData,
+                        backgroundColor: colors
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        if (todayCtx) {
+            new Chart(todayCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: todayData,
+                        backgroundColor: colors
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</div>
+</html>

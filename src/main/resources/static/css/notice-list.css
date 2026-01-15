@@ -2,7 +2,7 @@
 .noticeList table { width: 100%; border-collapse: collapse; background: white; table-layout: fixed; }
 .noticeList th, .noticeList td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
 .noticeList thead th { background: #f7f7f7; font-weight: 700; }
-.noticeList .cate { width: 120px; color: #6a1b9a; font-weight: 700; }
+.noticeList .cate { width: 120px; color: #0051c7; font-weight: 700; }
 .noticeList .tit a { color: #333; text-decoration: none; display: inline-block; max-width: 100%; white-space: normal; word-break: break-word; }
 .noticeList .tit a:hover { text-decoration: underline; }
 .noticeList .date { width: 140px; color: #777; }
@@ -94,7 +94,7 @@
     .noticeList .cate {
         font-size: 0.85rem;
         font-weight: 700;
-        color: #6a1b9a;
+        color: #0051c7;
         margin-bottom: 4px;
     }
 

@@ -24,6 +24,7 @@
 .noticeInfo dd { margin: 0; }
 
 .noticeCnts { padding: 12px 0 16px; line-height: 1.8; color: #333; font-size: 1.05rem; word-break: break-word; }
+.noticeCnts img { max-width: 33%; height: auto; }
 .notice-images { margin: 4px 0 16px; display: flex; flex-wrap: wrap; gap: 20px; }
 .notice-images img { max-width: 33%; height: auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
@@ -76,7 +77,6 @@
     .noticeInfo dl { width: auto; }
     
     .noticeCnts { padding: 8px 0 20px; font-size: 1rem; }
-    .notice-images img { max-width: 100%; }
     
     .noticeBt { margin-top: 40px; flex-direction: column; gap: 12px; }
     .noticeBt > div { display: flex; gap: 10px; width: 100%; }

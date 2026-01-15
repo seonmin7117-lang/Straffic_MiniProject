@@ -26,4 +26,8 @@ public interface MemberService {
     void changePassword(String memberId, String currentPassword, String newPassword);
 
     void changeTel(String memberId, String newTel);
+
+    void updateRole(String memberId, String role);
+
+    void deleteByAdmin(String memberId);
 }
