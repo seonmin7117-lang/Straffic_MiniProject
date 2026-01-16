@@ -138,27 +138,31 @@ body, main, .container, .wrap {
     width: 100%;
 }
 
+/* 게시글 등록 기본 버튼을 브랜드 블루 계열로 통일 */
 .btn-primary { 
     padding: 14px 28px; 
     border-radius: 8px; 
-    background: #333; 
+    background: var(--primary-color); 
     color: #fff; 
     border: none; 
     cursor: pointer; 
     font-weight: 700; 
     font-size: 1rem; 
-    transition: background 0.2s; 
+    transition: background 0.2s, box-shadow 0.2s; 
     white-space: nowrap;
 }
-.btn-primary:hover { background: #000; }
+.btn-primary:hover { background: var(--primary-hover); box-shadow: 0 4px 10px rgba(0, 81, 199, 0.35); }
+.btn-primary:active { background: #003f9e; box-shadow: none; }
+.btn-primary:disabled, .btn-primary[disabled] { background: #d9e6ff; color: #8ea4c7; cursor: not-allowed; box-shadow: none; }
 
+/* 취소·목록 버튼을 블루 아웃라인 보조 버튼으로 정리 */
 .btn-secondary { 
     padding: 14px 28px; 
     border-radius: 8px; 
-    background: #fff; 
-    color: #555; 
+    background: #e5f0ff; 
+    color: var(--primary-hover); 
     text-decoration: none; 
-    border: 1px solid #ddd; 
+    border: 1px solid var(--border-color); 
     font-weight: 700; 
     font-size: 1rem; 
     transition: all 0.2s; 
@@ -167,7 +171,9 @@ body, main, .container, .wrap {
     justify-content: center;
     white-space: nowrap;
 }
-.btn-secondary:hover { background: #f5f5f5; color: #333; border-color: #bbb; }
+.btn-secondary:hover { background: #f0f7ff; color: var(--primary-color); border-color: var(--primary-color); }
+.btn-secondary:active { background: var(--primary-hover); color: #fff; border-color: var(--primary-hover); }
+.btn-secondary:disabled, .btn-secondary[disabled] { background: #ecf3ff; color: #9bb0d6; border-color: #c2d4ff; cursor: not-allowed; box-shadow: none; }
 
 /* =========================================
    Mobile Optimization

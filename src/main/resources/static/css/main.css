@@ -16,7 +16,8 @@
 
 .hero-banner {
     flex: 1;
-    background: linear-gradient(135deg, #0051c7, #00a2ff);
+    /* 메인 히어로 배너: 브랜드 블루 그라디언트 적용 */
+    background: linear-gradient(135deg, var(--primary-hover), var(--secondary-color));
     border-radius: 12px;
     position: relative;
     overflow: hidden;
@@ -53,7 +54,7 @@
 .btn-hero {
     padding: 12px 30px;
     background: #ffffff;
-    color: #0051c7;
+    color: var(--primary-hover);
     font-weight: 700;
     border-radius: 30px;
     text-decoration: none;
@@ -83,7 +84,7 @@
     font-size: 1.1rem;
     font-weight: 700;
     margin-bottom: 15px;
-    color: #0b254a;
+    color: var(--text-main);
     text-align: center;
     letter-spacing: -0.5px;
 }
@@ -92,7 +93,8 @@
     display: block;
     width: 100%;
     padding: 12px;
-    background: linear-gradient(135deg, #0051c7, #007aff);
+    /* 메인 CTA 버튼: 브랜드 블루 계열 사용 */
+    background: linear-gradient(135deg, var(--primary-hover), var(--primary-color));
     color: white;
     text-align: center;
     border-radius: 8px;
@@ -152,7 +154,7 @@
     align-items: center;
     justify-content: center;
     font-size: 30px;
-    color: #0b254a;
+    color: var(--text-main);
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
@@ -165,23 +167,26 @@
 
 .user-role {
     font-size: 0.85rem;
-    color: #666;
+    color: var(--primary-hover);
     margin-bottom: 25px;
     display: inline-block;
     padding: 4px 12px;
-    background: #f0f0f0;
+    /* 일반 회원 배지를 연한 블루 톤으로 변경 */
+    background: #e5f0ff;
     border-radius: 20px;
     font-weight: 500;
+    border: 1px solid var(--border-color);
 }
 
 .user-role.role-admin {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    /* 관리자 배지에 브랜드 블루 그라데이션 적용 */
+    background: linear-gradient(135deg, var(--primary-hover) 0%, var(--primary-color) 100%);
     color: #ffffff;
     padding: 6px 19px;
-    box-shadow: 0 4px 15px rgba(30, 60, 114, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 81, 199, 0.35);
     font-weight: 700;
     letter-spacing: 0.8px;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
     text-transform: uppercase;
     font-size: 0.72rem;
     position: relative;
@@ -205,13 +210,32 @@
     100% { left: 100%; }
 }
 
+/* 로그아웃 버튼을 블루 계열 보조 버튼으로 정리 */
 .btn-logout {
-    background: #eee;
-    color: #333;
+    background: #e5f0ff;
+    color: var(--primary-hover);
+    border: 1px solid var(--primary-color);
 }
 
 .btn-logout:hover {
-    background: #ddd;
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-hover);
+}
+
+/* 로그아웃 버튼 active/disabled 상태 정의 */
+.btn-logout:active {
+    background: var(--primary-hover);
+    color: #fff;
+}
+
+.btn-logout:disabled,
+.btn-logout[disabled] {
+    background: #d9e6ff;
+    color: #8ea4c7;
+    border-color: #c2d4ff;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
 /* Social Login */
@@ -275,7 +299,7 @@
 .quick-item {
     text-align: center;
     text-decoration: none;
-    color: #555;
+    color: var(--text-light);
     transition: all 0.2s;
     display: flex;
     flex-direction: column;
@@ -286,7 +310,7 @@
 
 .quick-item:hover {
     transform: translateY(-2px);
-    color: #000000;
+    color: var(--accent-black);
 }
 
 .quick-icon {
@@ -299,12 +323,12 @@
     justify-content: center;
     margin-bottom: 8px;
     font-size: 22px;
-    color: #444;
+    color: #1d4ed8;
     transition: all 0.2s;
 }
 
 .quick-item:hover .quick-icon {
-    background: #333;
+    background: var(--primary-color);
     color: white;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
@@ -331,7 +355,7 @@
 
 .more-link {
     font-size: 0.9rem;
-    color: #888;
+    color: var(--text-light);
     text-decoration: none;
 }
 
@@ -349,7 +373,12 @@
     padding: 12px 0;
     border-bottom: 1px solid #f0f0f0;
     text-decoration: none;
-    color: #333;
+    color: var(--text-main);
+}
+
+.news-item:hover {
+    text-decoration: none;
+    color: var(--primary-hover);
 }
 
 .news-item:last-child {
@@ -357,8 +386,9 @@
 }
 
 .news-badge {
-    background: #f3e5f5;
-    color: #6a1b9a;
+    /* 공지 배지: 보라색 대신 연한 블루 포인트 */
+    background: #e5f0ff;
+    color: var(--primary-hover);
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 0.8rem;

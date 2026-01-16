@@ -2,13 +2,39 @@
 .noticeList table { width: 100%; border-collapse: collapse; background: white; table-layout: fixed; }
 .noticeList th, .noticeList td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
 .noticeList thead th { background: #f7f7f7; font-weight: 700; }
-.noticeList .cate { width: 120px; color: #0051c7; font-weight: 700; }
-.noticeList .tit a { color: #333; text-decoration: none; display: inline-block; max-width: 100%; white-space: normal; word-break: break-word; }
-.noticeList .tit a:hover { text-decoration: underline; }
+/* 공지 카테고리 텍스트에 브랜드 블루 사용 */
+.noticeList .cate { width: 120px; color: var(--primary-hover); font-weight: 700; }
+.noticeList .tit a {
+    color: #333;
+    text-decoration: none;
+    display: inline-block;
+    max-width: 100%;
+    white-space: normal;
+    word-break: break-word;
+}
+.noticeList .tit a:hover {
+    text-decoration: none;
+    /* 기본 색(#333)과 확실히 대비되는 진한 블루 */
+    color: var(--primary-hover);
+}
 .noticeList .date { width: 140px; color: #777; }
 .noticeList .count { width: 100px; color: #777; text-align: right; }
 .notice-tools { display: flex; gap: 10px; margin: 14px 0 18px; }
-.notice-tools input, .notice-tools select { padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; }
+.notice-tools input, .notice-tools select {
+    padding: 8px 10px;
+    /* 공지 검색 영역의 진한 테두리를 제거하고 부드러운 인풋으로 */
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: #f7f9ff;
+}
+
+.notice-tools input:focus,
+.notice-tools select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 1px rgba(0, 122, 255, 0.2);
+    background: #ffffff;
+}
 
 .pagination { 
     margin-top: 30px; 
@@ -22,18 +48,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #e0e0e0; 
+    border: 1px solid var(--border-color); 
     border-radius: 4px; 
     background: #fff; 
-    color: #555; 
+    color: var(--text-light); 
     text-decoration: none; 
     font-size: 0.9rem;
     transition: all 0.2s;
 }
 .pagination a:hover {
-    background-color: #f5f5f5;
-    color: #333;
-    border-color: #ccc;
+    background-color: #e5f0ff;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 .pagination strong { 
     min-width: 32px;
@@ -41,9 +67,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #333; 
+    background: var(--primary-color); 
     color: #fff; 
-    border: 1px solid #333; 
+    border: 1px solid var(--primary-color); 
     border-radius: 4px; 
     font-weight: 600;
 }
@@ -53,8 +79,18 @@
 }
 
 .notice-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.btn-write { padding: 8px 14px; background: #333; color: #fff; border-radius: 6px; text-decoration: none; }
-.btn-write:hover { background: #000; }
+.btn-write { padding: 8px 14px; background: var(--primary-color); color: #fff; border-radius: 6px; text-decoration: none; border: 1px solid transparent; }
+.btn-write:hover { background: var(--primary-hover); }
+.btn-write:active { background: #003f9e; }
+.btn-write:disabled, .btn-write[disabled] { background: #d9e6ff; color: #8ea4c7; cursor: not-allowed; }
+
+/* 공지 검색/작성 버튼 포커스 시 하얀색 테두리로 정리 */
+.notice-tools .btn-write:focus,
+.notice-tools .btn-write:focus-visible {
+    outline: none !important;
+    box-shadow: none;
+    border-color: #ffffff;
+}
 
 @media (max-width: 768px) {
     .notice-container { padding: 0 16px; }
@@ -62,8 +98,8 @@
 
     .notice-tools { flex-direction: column; gap: 10px; }
     .notice-tools form { display: flex; gap: 8px; width: 100%; }
-    .notice-tools select { width: 100px; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; }
-    .notice-tools input { flex: 1; width: auto; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; }
+    .notice-tools select { width: 100px; padding: 8px 10px; border: 1px solid transparent; border-radius: 6px; background: #f7f9ff; }
+    .notice-tools input { flex: 1; width: auto; padding: 8px 10px; border: 1px solid transparent; border-radius: 6px; background: #f7f9ff; }
     .btn-write { width: 100%; text-align: center; box-sizing: border-box; }
 
     .noticeList table { display: block; border: 0; }
@@ -94,7 +130,7 @@
     .noticeList .cate {
         font-size: 0.85rem;
         font-weight: 700;
-        color: #0051c7;
+        color: var(--primary-hover);
         margin-bottom: 4px;
     }
 

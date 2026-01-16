@@ -41,9 +41,14 @@
                         <div class="summary-title">자전거 전체 조회수 (오늘)</div>
                         <div class="summary-value" th:text="${dailyViews != null ? dailyViews.bike : 0}">0</div>
                     </div>
+                    <!--
                     <div class="summary-card subway">
                         <div class="summary-title">지하철 전체 조회수 (오늘)</div>
                         <div class="summary-value" th:text="${dailyViews != null ? dailyViews.subway : 0}">0</div>
+                    </div>
+                    -->
+                    <div class="summary-card subway subway-image">
+                        <img th:src="@{/image/1단잘하조.jpeg}" class="subway-summary-image">
                     </div>
                 </div>
 

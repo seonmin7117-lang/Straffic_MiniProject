@@ -1,17 +1,35 @@
 /* Modern Reset & Base */
 :root {
+    /* 브랜드 기본 블루: 주요 버튼, 링크, 하이라이트 */
     --primary-color: #007aff;
+    /* 호버/포커스 상태에서 살짝 어두운 블루 */
     --primary-hover: #0051c7;
+    /* 그래디언트·보조 포인트용 밝은 블루 */
     --secondary-color: #4da3ff;
+
+    /* 페이지 전체 배경을 부드러운 블루 톤으로 */
     --bg-color: #f2f6ff;
+    /* 카드·패널 기본 배경 */
     --card-bg: #ffffff;
     --white: #ffffff;
+
+    /* 블루가 살짝 섞인 기본 보더 컬러 */
     --border-color: #d1e2ff;
+    /* 더 진한 보더/구분선용 블루 */
+    --border-strong: #b3d0ff;
+
+    /* 본문 및 서브 텍스트 컬러 */
     --text-main: #102542;
     --text-light: #50627a;
+
+    /* 헤더·푸터 등 깊은 영역에 쓰는 딥 블루 */
     --accent-black: #001b44;
+
+    /* 블루 톤이 살짝 섞인 그림자 */
     --shadow-sm: 0 2px 4px rgba(0, 55, 122, 0.08);
     --shadow-md: 0 10px 30px rgba(0, 80, 170, 0.12);
+
+    /* 공통 라운드 값 */
     --radius-md: 12px;
     --radius-lg: 20px;
 }
@@ -108,7 +126,7 @@ ul {
 }
 
 .layout-footer {
-    background: linear-gradient(135deg, #00336b, #001b44);
+    background: linear-gradient(135deg, #00336b, var(--accent-black));
     color: #c7d8ff;
     padding: 40px 20px;
     text-align: center;
@@ -223,7 +241,8 @@ ul {
     backdrop-filter: blur(10px);
     padding: 5px 0; /* Reduced padding for thinner look */
     box-shadow: var(--shadow-sm);
-    border-bottom: 3px solid var(--accent-black);
+    /* 탑 하단의 검은 라인은 제거하여 더 가벼운 헤더로 */
+    border-bottom: none;
 }
 
 .navbar-container {
@@ -330,9 +349,8 @@ ul {
 }
 
 .dropdown-item:hover {
-    background-color: #f8f9fa; /* Very light gray hover */
-    color: var(--primary-color); /* Dark text on hover */
-    /* Removed translation for better centering */
+    background-color: #f8f9fa;
+    color: var(--primary-color);
 }
 
 /* Pagination */

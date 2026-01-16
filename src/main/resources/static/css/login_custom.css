@@ -143,26 +143,40 @@
     border-color: #666;
 }
 
-/* Login Button */
+/* Login Button: 이메일/회원가입 기본 CTA를 브랜드 블루 계열로 통일 */
 .btn-black-login {
     width: 100%;
     padding: 12px; /* Reduced padding */
-    background-color: #111;
+    background: linear-gradient(135deg, var(--primary-hover), var(--primary-color));
     color: white;
     font-size: 15px;
     font-weight: 700;
     border: none;
     border-radius: 30px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
     margin-top: 15px; /* Drastically reduced margin */
     margin-bottom: 10px; /* Drastically reduced margin */
 }
 
 .btn-black-login:hover {
-    background-color: #333;
+    background: linear-gradient(135deg, #003f9e, var(--primary-hover));
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 5px 15px rgba(0,81,199,0.3);
+}
+
+.btn-black-login:active {
+    background: #003070;
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.btn-black-login:disabled,
+.btn-black-login[disabled] {
+    background: #d9e6ff;
+    color: #8ea4c7;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
 /* Sub Links */

@@ -21,7 +21,7 @@
     background: #fff;
     padding: 40px;
     border-radius: 12px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     box-sizing: border-box;
     box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     margin: 0 auto;
@@ -51,6 +51,7 @@
     font-size: 15px;
 }
 
+/* KTX 예매 공통 버튼에 블루 계열 적용 */
 .btn {
     padding: 12px 20px;
     border-radius: 6px;
@@ -59,8 +60,10 @@
     font-weight: 600;
     transition: 0.2s;
 }
-.btn-primary { background: #333; color: #fff; }
-.btn-primary:hover { background: #000; }
+.btn-primary { background: var(--primary-color); color: #fff; }
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-primary:active { background: #003f9e; }
+.btn-primary:disabled, .btn-primary[disabled] { background: #d9e6ff; color: #8ea4c7; cursor: not-allowed; box-shadow: none; }
 
 .train-card {
     border: 1px solid #eee;
@@ -159,9 +162,9 @@
 }
 
 .seat-item.selected {
-    background: #333;
+    background: var(--primary-color);
     color: #fff;
-    border-color: #333;
+    border-color: var(--primary-color);
 }
 
 .seat-item.disabled {
@@ -191,4 +194,3 @@
         grid-template-columns: repeat(4, 1fr);
     }
 }
-
