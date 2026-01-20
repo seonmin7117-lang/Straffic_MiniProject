@@ -1,23 +1,44 @@
 # Gradle wrapper
-/gradlew text eol=lf
+gradlew text eol=lf
+mvnw text eol=lf
 *.bat text eol=crlf
-*.jar binary
+*.cmd text eol=crlf
 
 # Java sources
 *.java text diff=java linguist-detectable
 *.kt text diff=kotlin linguist-detectable
 *.groovy text diff=java
+*.scala text diff=java
 *.gradle text diff=java
 *.gradle.kts text diff=kotlin
 
-# XML and properties files
-*.xml text linguist-detectable
+# Web files (excluded from language stats)
+*.css text diff=css linguist-vendored
+*.scss text diff=css linguist-vendored
+*.html text diff=html linguist-vendored
+*.htm text diff=html linguist-vendored
+*.js text linguist-vendored
+*.jsp text
+*.jspf text
+*.jspx text
+
+# Configuration files
 *.properties text linguist-detectable
+*.xml text linguist-detectable
+*.yml text linguist-detectable
+*.yaml text linguist-detectable
+*.json text
 
-# Exclude CSS/HTML from language statistics
-*.css linguist-vendored
-*.html linguist-vendored
+# Template files
+*.tld text
+*.tag text
+*.tagx text
 
-# Include generated or doc files if needed
-*.yml linguist-detectable
-*.yaml linguist-detectable
+# Binary files
+*.class binary
+*.dll binary
+*.ear binary
+*.jar binary
+*.so binary
+*.war binary
+*.jks binary
