@@ -4,16 +4,20 @@
 *.jar binary
 
 # Java sources
-*.java text diff=java
-*.kt text diff=kotlin
+*.java text diff=java linguist-detectable
+*.kt text diff=kotlin linguist-detectable
 *.groovy text diff=java
 *.gradle text diff=java
 *.gradle.kts text diff=kotlin
 
-# XML files
-*.xml text
-*.properties text
+# XML and properties files
+*.xml text linguist-detectable
+*.properties text linguist-detectable
 
 # Exclude CSS/HTML from language statistics
 *.css linguist-vendored
 *.html linguist-vendored
+
+# Include generated or doc files if needed
+*.yml linguist-detectable
+*.yaml linguist-detectable
