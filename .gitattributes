@@ -1,3 +1,19 @@
+# Gradle wrapper
 /gradlew text eol=lf
 *.bat text eol=crlf
 *.jar binary
+
+# Java sources
+*.java text diff=java
+*.kt text diff=kotlin
+*.groovy text diff=java
+*.gradle text diff=java
+*.gradle.kts text diff=kotlin
+
+# XML files
+*.xml text
+*.properties text
+
+# Exclude CSS/HTML from language statistics
+*.css linguist-vendored
+*.html linguist-vendored
