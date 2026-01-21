@@ -287,7 +287,7 @@ ul {
     height: 40px; /* Force consistent height for all nav items */
 }
 
-/* 왼쪽 끝 아이템 (M-MaaS 로고)의 왼쪽 패딩 제거 및 시각적 보정을 위한 음수 마진 적용 */
+/* 왼쪽 끝 아이템 (S-MaaS 로고)의 왼쪽 패딩 제거 및 시각적 보정을 위한 음수 마진 적용 */
 .nav-links .nav-item:first-child .nav-link {
     padding-left: 0;
     margin-left: 20px;
