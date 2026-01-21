@@ -5,6 +5,7 @@ import com.example.straffic.dashboard.dto.KtxReservationSummaryDTO;
 import com.example.straffic.dashboard.dto.WeeklyStatsDTO;
 import com.example.straffic.dashboard.dto.YearlyStatsDTO;
 import com.example.straffic.dashboard.service.PageViewStatsService;
+import com.example.straffic.dashboard.repository.PageViewHistoryRepository;
 import com.example.straffic.mobility.entity.KtxReservationEntity;
 import com.example.straffic.mobility.repository.KtxReservationRepository;
 import com.example.straffic.board.repository.BoardRepository;
@@ -44,14 +45,15 @@ public class DashboardController {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final PageViewStatsService pageViewStatsService;
+    private final PageViewHistoryRepository pageViewHistoryRepository;
 
     @GetMapping("/admin/dashboard")
     public String dashboard(@RequestParam(value = "ktxPage", defaultValue = "1") int ktxPage,
                             Model model) {
         DailyViewsDTO dailyViews = pageViewStatsService.getTotals();
 
-        WeeklyStatsDTO weeklyStats = buildWeeklyStats();
-        YearlyStatsDTO yearlyStats = buildYearlyStats();
+        WeeklyStatsDTO weeklyStats = buildWeeklyStats("ALL");
+        YearlyStatsDTO yearlyStats = buildYearlyStats("ALL");
 
         int ktxPageIndex = Math.max(ktxPage - 1, 0);
         Page<KtxReservationEntity> ktxPageResult = loadKtxReservationsPage(ktxPageIndex);
@@ -122,7 +124,19 @@ public class DashboardController {
         return "security/security";
     }
 
-    private WeeklyStatsDTO buildWeeklyStats() {
+    @GetMapping("/admin/dashboard/api/stats")
+    @org.springframework.web.bind.annotation.ResponseBody
+    public java.util.Map<String, Object> getStats(@RequestParam String type, @RequestParam String platform) {
+        java.util.Map<String, Object> result = new java.util.HashMap<>();
+        if ("weekly".equals(type)) {
+            result.put("stats", buildWeeklyStats(platform));
+        } else if ("yearly".equals(type)) {
+            result.put("stats", buildYearlyStats(platform));
+        }
+        return result;
+    }
+
+    private WeeklyStatsDTO buildWeeklyStats(String platform) {
         LocalDate today = LocalDate.now();
         int dayOfWeekValue = today.getDayOfWeek().getValue();
         LocalDate monday = today.minusDays((dayOfWeekValue + 6) % 7);
@@ -135,14 +149,14 @@ public class DashboardController {
         for (int i = 0; i < 7; i++) {
             LocalDate day = monday.plusDays(i);
             LocalDate prevDay = mondayPrevWeek.plusDays(i);
-            current.add(countTotalActivityForDate(day));
-            previous.add(countTotalActivityForDate(prevDay));
+            current.add(countTotalActivityForDate(day, platform));
+            previous.add(countTotalActivityForDate(prevDay, platform));
         }
 
         return new WeeklyStatsDTO(labels, current, previous);
     }
 
-    private YearlyStatsDTO buildYearlyStats() {
+    private YearlyStatsDTO buildYearlyStats(String platform) {
         LocalDate today = LocalDate.now();
         int currentYear = today.getYear();
         int previousYear = currentYear - 1;
@@ -153,32 +167,60 @@ public class DashboardController {
         List<Integer> previous = new ArrayList<>();
 
         for (int month = 1; month <= 12; month++) {
-            current.add(countTotalActivityForMonth(currentYear, month));
-            previous.add(countTotalActivityForMonth(previousYear, month));
+            current.add(countTotalActivityForMonth(currentYear, month, platform));
+            previous.add(countTotalActivityForMonth(previousYear, month, platform));
         }
 
         return new YearlyStatsDTO(labels, current, previous);
     }
 
-    private int countTotalActivityForDate(LocalDate date) {
+    private int countTotalActivityForDate(LocalDate date, String platform) {
         LocalDateTime start = date.atStartOfDay();
         LocalDateTime end = date.plusDays(1).atStartOfDay();
-        long parking = parkingRecordRepository.countByEntryTimeBetween(start, end);
-        long ktx = ktxReservationRepository.countByReservedAtBetween(start, end);
-        long total = parking + ktx;
+        long total = 0;
+
+        if ("ALL".equals(platform)) {
+            long parking = pageViewHistoryRepository.countByPageNameAndViewedAtBetween("PARKING", start, end);
+            long ktx = pageViewHistoryRepository.countByPageNameAndViewedAtBetween("KTX", start, end);
+            long bike = pageViewHistoryRepository.countByPageNameAndViewedAtBetween("BIKE", start, end);
+            total = parking + ktx + bike;
+        } else if ("PARKING".equals(platform)) {
+            total = pageViewHistoryRepository.countByPageNameAndViewedAtBetween("PARKING", start, end);
+        } else if ("KTX".equals(platform)) {
+            total = pageViewHistoryRepository.countByPageNameAndViewedAtBetween("KTX", start, end);
+        } else if ("BIKE".equals(platform)) {
+            total = pageViewHistoryRepository.countByPageNameAndViewedAtBetween("BIKE", start, end);
+        } else if ("SUBWAY".equals(platform)) {
+             total = pageViewHistoryRepository.countByPageNameAndViewedAtBetween("SUBWAY", start, end);
+        }
+
         if (total > Integer.MAX_VALUE) {
             return Integer.MAX_VALUE;
         }
         return (int) total;
     }
 
-    private int countTotalActivityForMonth(int year, int month) {
+    private int countTotalActivityForMonth(int year, int month, String platform) {
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDateTime start = startDate.atStartOfDay();
         LocalDateTime end = startDate.plusMonths(1).atStartOfDay();
-        long parking = parkingRecordRepository.countByEntryTimeBetween(start, end);
-        long ktx = ktxReservationRepository.countByReservedAtBetween(start, end);
-        long total = parking + ktx;
+        long total = 0;
+
+        if ("ALL".equals(platform)) {
+            long parking = pageViewHistoryRepository.countByPageNameAndViewedAtBetween("PARKING", start, end);
+            long ktx = pageViewHistoryRepository.countByPageNameAndViewedAtBetween("KTX", start, end);
+            long bike = pageViewHistoryRepository.countByPageNameAndViewedAtBetween("BIKE", start, end);
+            total = parking + ktx + bike;
+        } else if ("PARKING".equals(platform)) {
+            total = pageViewHistoryRepository.countByPageNameAndViewedAtBetween("PARKING", start, end);
+        } else if ("KTX".equals(platform)) {
+            total = pageViewHistoryRepository.countByPageNameAndViewedAtBetween("KTX", start, end);
+        } else if ("BIKE".equals(platform)) {
+            total = pageViewHistoryRepository.countByPageNameAndViewedAtBetween("BIKE", start, end);
+        } else if ("SUBWAY".equals(platform)) {
+            total = pageViewHistoryRepository.countByPageNameAndViewedAtBetween("SUBWAY", start, end);
+        }
+
         if (total > Integer.MAX_VALUE) {
             return Integer.MAX_VALUE;
         }
@@ -204,12 +246,18 @@ public class DashboardController {
 
         String memberId = entity.getMemberId();
         if (memberId != null) {
+            // 1. Social ID filtering
             boolean isSocial = memberId.startsWith("naver_") || memberId.startsWith("kakao_") || memberId.startsWith("google_");
             if (isSocial) {
                 int idx = memberId.indexOf("_");
                 if (idx != -1 && memberId.length() > idx + 4) {
                     memberId = memberId.substring(0, idx + 4);
                 }
+            }
+
+            // 2. Length check: Truncate if longer than 6 chars
+            if (memberId.length() > 6) {
+                memberId = memberId.substring(0, 6) + "...";
             }
         }
 
