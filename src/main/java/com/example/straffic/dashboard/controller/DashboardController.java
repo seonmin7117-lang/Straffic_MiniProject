@@ -50,7 +50,8 @@ public class DashboardController {
     @GetMapping("/admin/dashboard")
     public String dashboard(@RequestParam(value = "ktxPage", defaultValue = "1") int ktxPage,
                             Model model) {
-        DailyViewsDTO dailyViews = pageViewStatsService.getTotals();
+        // DailyViewsDTO dailyViews = pageViewStatsService.getTotals(); // 기존: 누적 조회수 반환
+        DailyViewsDTO dailyViews = getTodayDailyViews(); // 변경: 오늘 하루 조회수 반환
 
         WeeklyStatsDTO weeklyStats = buildWeeklyStats("ALL");
         YearlyStatsDTO yearlyStats = buildYearlyStats("ALL");
@@ -86,6 +87,19 @@ public class DashboardController {
         model.addAttribute("recent3Notices", recent3Notices);
 
         return "dashboard/dashboard";
+    }
+
+    private DailyViewsDTO getTodayDailyViews() {
+        LocalDate today = LocalDate.now();
+        LocalDateTime start = today.atStartOfDay();
+        LocalDateTime end = today.plusDays(1).atStartOfDay();
+
+        int parking = (int) pageViewHistoryRepository.countByPageNameAndViewedAtBetween("PARKING", start, end);
+        int ktx = (int) pageViewHistoryRepository.countByPageNameAndViewedAtBetween("KTX", start, end);
+        int bike = (int) pageViewHistoryRepository.countByPageNameAndViewedAtBetween("BIKE", start, end);
+        int subway = (int) pageViewHistoryRepository.countByPageNameAndViewedAtBetween("SUBWAY", start, end);
+
+        return new DailyViewsDTO(parking, ktx, bike, subway);
     }
 
     @GetMapping("/dashboard/security")
